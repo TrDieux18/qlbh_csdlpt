@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Bán Hàng</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Hệ Thống Quản Lý Bán Hàng</h1>
+
+      <!-- Navigation -->
+      <div class="nav-tabs">
+        <button class="tab-btn active" onclick="showTab('branches')">
+          Chi Nhánh
+        </button>
+        <button class="tab-btn" onclick="showTab('employees')">
+          Nhân Viên
+        </button>
+        <button class="tab-btn" onclick="showTab('customers')">
+          Khách Hàng
+        </button>
+        <button class="tab-btn" onclick="showTab('products')">Sản Phẩm</button>
+        <button class="tab-btn" onclick="showTab('inventory')">Kho Hàng</button>
+        <button class="tab-btn" onclick="showTab('invoices')">Hóa Đơn</button>
+      </div>
+
+      <!-- BRANCHES TAB -->
+      <div id="branches" class="tab-content active">
+        <h2>Quản Lý Chi Nhánh</h2>
+        <button class="btn-add" onclick="showBranchForm()">
+          + Thêm Chi Nhánh
+        </button>
+
+        <div id="branchForm" class="form-container" style="display: none">
+          <h3 id="branchFormTitle">Thêm Chi Nhánh Mới</h3>
+          <form id="branchFormElement">
+            <input
+              type="text"
+              id="branch_id"
+              placeholder="Mã chi nhánh (VD: BR001)"
+              required
+            />
+            <input
+              type="text"
+              id="branch_name"
+              placeholder="Tên chi nhánh"
+              required
+            />
+            <input type="text" id="branch_address" placeholder="Địa chỉ" />
+            <input type="text" id="branch_phone" placeholder="Số điện thoại" />
+            <input type="email" id="branch_email" placeholder="Email" />
+            <input
+              type="date"
+              id="branch_founded_date"
+              placeholder="Ngày thành lập"
+            />
+            <input type="text" id="branch_type" placeholder="Loại chi nhánh" />
+            <select id="branch_status">
+              <option value="1">Hoạt động</option>
+              <option value="0">Không hoạt động</option>
+            </select>
+            <div class="form-actions">
+              <button type="submit" class="btn-save">Lưu</button>
+              <button
+                type="button"
+                class="btn-cancel"
+                onclick="hideBranchForm()"
+              >
+                Hủy
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <table id="branchTable">
+          <thead>
+            <tr>
+              <th>Mã CN</th>
+              <th>Tên Chi Nhánh</th>
+              <th>Địa Chỉ</th>
+              <th>Điện Thoại</th>
+              <th>Email</th>
+              <th>Trạng Thái</th>
+              <th>Hành Động</th>
+            </tr>
+          </thead>
+          <tbody id="branchTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- EMPLOYEES TAB -->
+      <div id="employees" class="tab-content">
+        <h2>Quản Lý Nhân Viên</h2>
+        <button class="btn-add" onclick="showEmployeeForm()">
+          + Thêm Nhân Viên
+        </button>
+
+        <div id="employeeForm" class="form-container" style="display: none">
+          <h3 id="employeeFormTitle">Thêm Nhân Viên Mới</h3>
+          <form id="employeeFormElement">
+            <input
+              type="text"
+              id="employee_id"
+              placeholder="Mã NV (VD: EMP0001)"
+              required
+            />
+            <input
+              type="text"
+              id="employee_branch_id"
+              placeholder="Mã chi nhánh"
+              required
+            />
+            <input
+              type="text"
+              id="employee_full_name"
+              placeholder="Họ tên"
+              required
+            />
+            <input
+              type="date"
+              id="employee_birth_date"
+              placeholder="Ngày sinh"
+            />
+            <select id="employee_gender">
+              <option value="">Chọn giới tính</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+            </select>
+            <input
+              type="text"
+              id="employee_phone"
+              placeholder="Số điện thoại"
+            />
+            <input type="email" id="employee_email" placeholder="Email" />
+            <input type="text" id="employee_position" placeholder="Chức vụ" />
+            <input
+              type="date"
+              id="employee_hire_date"
+              placeholder="Ngày vào làm"
+            />
+            <input
+              type="number"
+              id="employee_salary"
+              placeholder="Lương"
+              step="0.01"
+            />
+            <select id="employee_status">
+              <option value="1">Đang làm việc</option>
+              <option value="0">Đã nghỉ</option>
+            </select>
+            <div class="form-actions">
+              <button type="submit" class="btn-save">Lưu</button>
+              <button
+                type="button"
+                class="btn-cancel"
+                onclick="hideEmployeeForm()"
+              >
+                Hủy
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <table id="employeeTable">
+          <thead>
+            <tr>
+              <th>Mã NV</th>
+              <th>Họ Tên</th>
+              <th>Chi Nhánh</th>
+              <th>Chức Vụ</th>
+              <th>Điện Thoại</th>
+              <th>Email</th>
+              <th>Lương</th>
+              <th>Trạng Thái</th>
+              <th>Hành Động</th>
+            </tr>
+          </thead>
+          <tbody id="employeeTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- CUSTOMERS TAB -->
+      <div id="customers" class="tab-content">
+        <h2>Quản Lý Khách Hàng</h2>
+        <button class="btn-add" onclick="showCustomerForm()">
+          + Thêm Khách Hàng
+        </button>
+
+        <div id="customerForm" class="form-container" style="display: none">
+          <h3 id="customerFormTitle">Thêm Khách Hàng Mới</h3>
+          <form id="customerFormElement">
+            <input
+              type="text"
+              id="customer_id"
+              placeholder="Mã KH (VD: CUS0001)"
+              required
+            />
+            <input
+              type="text"
+              id="customer_branch_id"
+              placeholder="Mã chi nhánh"
+              required
+            />
+            <input
+              type="text"
+              id="customer_full_name"
+              placeholder="Họ tên"
+              required
+            />
+            <input
+              type="text"
+              id="customer_phone"
+              placeholder="Số điện thoại"
+            />
+            <input type="email" id="customer_email" placeholder="Email" />
+            <input type="text" id="customer_address" placeholder="Địa chỉ" />
+            <input
+              type="date"
+              id="customer_registration_date"
+              placeholder="Ngày đăng ký"
+            />
+            <input
+              type="text"
+              id="customer_type"
+              placeholder="Loại khách hàng"
+            />
+            <input
+              type="number"
+              id="customer_reward_points"
+              placeholder="Điểm thưởng"
+              value="0"
+            />
+            <div class="form-actions">
+              <button type="submit" class="btn-save">Lưu</button>
+              <button
+                type="button"
+                class="btn-cancel"
+                onclick="hideCustomerForm()"
+              >
+                Hủy
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <table id="customerTable">
+          <thead>
+            <tr>
+              <th>Mã KH</th>
+              <th>Họ Tên</th>
+              <th>Điện Thoại</th>
+              <th>Email</th>
+              <th>Địa Chỉ</th>
+              <th>Loại KH</th>
+              <th>Điểm Thưởng</th>
+              <th>Hành Động</th>
+            </tr>
+          </thead>
+          <tbody id="customerTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- PRODUCTS TAB -->
+      <div id="products" class="tab-content">
+        <h2>Quản Lý Sản Phẩm</h2>
+        <button class="btn-add" onclick="showProductForm()">
+          + Thêm Sản Phẩm
+        </button>
+
+        <div id="productForm" class="form-container" style="display: none">
+          <h3 id="productFormTitle">Thêm Sản Phẩm Mới</h3>
+          <form id="productFormElement">
+            <input
+              type="text"
+              id="product_id"
+              placeholder="Mã SP (VD: PRD0001)"
+              required
+            />
+            <input
+              type="text"
+              id="product_name"
+              placeholder="Tên sản phẩm"
+              required
+            />
+            <input type="text" id="product_category" placeholder="Danh mục" />
+            <input
+              type="text"
+              id="product_unit"
+              placeholder="Đơn vị (VD: Cái, Kg)"
+            />
+            <input
+              type="number"
+              id="product_price"
+              placeholder="Giá"
+              step="0.01"
+              required
+            />
+            <textarea
+              id="product_description"
+              placeholder="Mô tả sản phẩm"
+              rows="3"
+            ></textarea>
+            <select id="product_status">
+              <option value="1">Còn hàng</option>
+              <option value="0">Hết hàng</option>
+            </select>
+            <div class="form-actions">
+              <button type="submit" class="btn-save">Lưu</button>
+              <button
+                type="button"
+                class="btn-cancel"
+                onclick="hideProductForm()"
+              >
+                Hủy
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <table id="productTable">
+          <thead>
+            <tr>
+              <th>Mã SP</th>
+              <th>Tên Sản Phẩm</th>
+              <th>Danh Mục</th>
+              <th>Đơn Vị</th>
+              <th>Giá</th>
+              <th>Trạng Thái</th>
+              <th>Hành Động</th>
+            </tr>
+          </thead>
+          <tbody id="productTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- INVENTORY TAB -->
+      <div id="inventory" class="tab-content">
+        <h2>Quản Lý Kho Hàng</h2>
+        <button class="btn-add" onclick="showInventoryForm()">
+          + Thêm Hàng Tồn
+        </button>
+
+        <div id="inventoryForm" class="form-container" style="display: none">
+          <h3 id="inventoryFormTitle">Thêm Hàng Tồn Mới</h3>
+          <form id="inventoryFormElement">
+            <input
+              type="text"
+              id="inventory_id"
+              placeholder="Mã tồn kho (VD: INV00000001)"
+              required
+            />
+            <select id="inventory_branch_id" required>
+              <option value="">Chọn chi nhánh</option>
+            </select>
+            <select id="inventory_product_id" required>
+              <option value="">Chọn sản phẩm</option>
+            </select>
+            <input
+              type="number"
+              id="inventory_quantity"
+              placeholder="Số lượng tồn"
+              min="0"
+              required
+            />
+            <input
+              type="date"
+              id="inventory_restock_date"
+              placeholder="Ngày nhập kho"
+            />
+            <textarea
+              id="inventory_notes"
+              placeholder="Ghi chú"
+              rows="2"
+            ></textarea>
+            <div class="form-actions">
+              <button type="submit" class="btn-save">Lưu</button>
+              <button
+                type="button"
+                class="btn-cancel"
+                onclick="hideInventoryForm()"
+              >
+                Hủy
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <table id="inventoryTable">
+          <thead>
+            <tr>
+              <th>Chi Nhánh</th>
+              <th>Sản Phẩm</th>
+              <th>Số Lượng Tồn</th>
+              <th>Ngày Nhập Kho</th>
+              <th>Ghi Chú</th>
+              <th>Hành Động</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- INVOICES TAB -->
+      <div id="invoices" class="tab-content">
+        <h2>Quản Lý Hóa Đơn</h2>
+        <button class="btn-add" onclick="showInvoiceForm()">
+          + Tạo Hóa Đơn
+        </button>
+
+        <div id="invoiceForm" class="form-container" style="display: none">
+          <h3 id="invoiceFormTitle">Tạo Hóa Đơn Mới</h3>
+          <form id="invoiceFormElement">
+            <input
+              type="text"
+              id="invoice_id"
+              placeholder="Mã hóa đơn (VD: INV0001)"
+              required
+            />
+            <select id="invoice_branch_id" required>
+              <option value="">Chọn chi nhánh</option>
+            </select>
+            <select id="invoice_customer_id" required>
+              <option value="">Chọn khách hàng</option>
+            </select>
+            <select id="invoice_employee_id" required>
+              <option value="">Chọn nhân viên</option>
+            </select>
+            <input type="datetime-local" id="invoice_date" required />
+            <input
+              type="text"
+              id="invoice_payment_method"
+              placeholder="Phương thức thanh toán"
+            />
+            <select id="invoice_status">
+              <option value="Pending">Chờ xử lý</option>
+              <option value="Completed">Hoàn thành</option>
+              <option value="Cancelled">Đã hủy</option>
+            </select>
+
+            <h4>Chi Tiết Hóa Đơn</h4>
+            <div id="invoiceDetails">
+              <div class="invoice-detail-row">
+                <select class="detail-product" required>
+                  <option value="">Chọn sản phẩm</option>
+                </select>
+                <input
+                  type="number"
+                  class="detail-quantity"
+                  placeholder="Số lượng"
+                  min="1"
+                  required
+                />
+                <input
+                  type="number"
+                  class="detail-price"
+                  placeholder="Đơn giá"
+                  step="0.01"
+                  required
+                />
+                <button
+                  type="button"
+                  class="btn-remove"
+                  onclick="removeDetailRow(this)"
+                >
+                  Xóa
+                </button>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn-add-detail"
+              onclick="addDetailRow()"
+            >
+              + Thêm Sản Phẩm
+            </button>
+
+            <input
+              type="number"
+              id="invoice_discount"
+              placeholder="Giảm giá (VNĐ)"
+              step="0.01"
+              value="0"
+              oninput="calculateTotal()"
+            />
+
+            <div class="invoice-summary">
+              <strong>Tổng Tiền: <span id="totalAmount">0</span> VNĐ</strong
+              ><br />
+              <strong>Giảm Giá: <span id="discountAmount">0</span> VNĐ</strong
+              ><br />
+              <strong>Thành Tiền: <span id="finalAmount">0</span> VNĐ</strong>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-save">Lưu Hóa Đơn</button>
+              <button
+                type="button"
+                class="btn-cancel"
+                onclick="hideInvoiceForm()"
+              >
+                Hủy
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <table id="invoiceTable">
+          <thead>
+            <tr>
+              <th>Mã HĐ</th>
+              <th>Chi Nhánh</th>
+              <th>Khách Hàng</th>
+              <th>Nhân Viên</th>
+              <th>Ngày Lập</th>
+              <th>Tổng Tiền</th>
+              <th>Trạng Thái</th>
+              <th>Hành Động</th>
+            </tr>
+          </thead>
+          <tbody id="invoiceTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Modal for Invoice Details -->
+    <div id="invoiceModal" class="modal">
+      <div class="modal-content">
+        <span class="modal-close" onclick="closeInvoiceModal()">&times;</span>
+        <h2>Chi Tiết Hóa Đơn</h2>
+        <div id="invoiceModalBody"></div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
