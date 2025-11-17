@@ -22,8 +22,6 @@ CSDLPT/
 │   ├── index.html              # Giao diện chính
 │   ├── style.css               # Styling
 │   └── script.js               # Logic xử lý frontend
-└── database/
-    └── create_database.sql     # Script tạo database
 ```
 
 ## Chức năng
